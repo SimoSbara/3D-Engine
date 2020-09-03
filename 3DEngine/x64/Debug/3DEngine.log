@@ -1,0 +1,11 @@
+﻿  3DEngine.cpp
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\header\olcConsoleGameEngine.h(759,1): warning C4267: 'inizializzazione': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\header\olcConsoleGameEngine.h(1099,1): warning C4267: 'return': conversione da 'size_t' a 'unsigned int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\header\olcConsoleGameEngine.h(1196,1): warning C4312: 'cast di tipo': conversione da 'DWORD' a 'olcConsoleGameEngine *', di dimensioni maggiori
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\3DEngine.cpp(166,43): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\3DEngine.cpp(166,22): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\3DEngine.cpp(165,43): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\3DEngine.cpp(165,22): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\3DEngine.cpp(164,55): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\3DEngine.cpp(164,34): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+  3DEngine.vcxproj -> E:\Users\andre\Documents\GitHub\3D-Engine\x64\Debug\3DEngine.exe
