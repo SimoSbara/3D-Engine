@@ -1,7 +1,6 @@
 #include <olcConsoleGameEngine.h>
 using namespace std;
 
-
 struct vec3d
 {
 	float x, y, z;
@@ -35,6 +34,8 @@ private:
 	mesh meshCube;
 	mat4x4 matProj;
 
+	float k;
+	bool meshFar = false;
 	float fTheta;
 
 	void MultiplyMatrixVector(vec3d& i, vec3d& o, mat4x4& m)
@@ -48,6 +49,13 @@ private:
 		{
 			o.x /= w; o.y /= w; o.z /= w;
 		}
+	}
+
+	void RotateMesh(triangle& i, triangle& o, mat4x4 m)
+	{
+		MultiplyMatrixVector(i.p[0], o.p[0], m);
+		MultiplyMatrixVector(i.p[1], o.p[1], m);
+		MultiplyMatrixVector(i.p[2], o.p[2], m);
 	}
 
 public:
@@ -100,22 +108,32 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
+		if (meshFar == true)
+			k -= 0.1f;
+		else if (meshFar == false)
+			k += 0.1f;
+
+		if (k >= 5)
+			meshFar = true;
+		else if (k <= 2)
+			meshFar = false;
+
 		// Clear Screen
 		Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, FG_BLACK);
 
 		// Set up rotation matrices
 		mat4x4 matRotZ, matRotX;
-		fTheta += 1.0f * fElapsedTime;
+		fTheta += 2.0f * fElapsedTime;
 
-		// Rotation Z
+		// Rotation Z Matrix Population
 		matRotZ.m[0][0] = cosf(fTheta);
 		matRotZ.m[0][1] = sinf(fTheta);
 		matRotZ.m[1][0] = -sinf(fTheta);
 		matRotZ.m[1][1] = cosf(fTheta);
 		matRotZ.m[2][2] = 1;
 		matRotZ.m[3][3] = 1;
-
-		// Rotation X
+		
+		// Rotation X Matrix Population
 		matRotX.m[0][0] = 1;
 		matRotX.m[1][1] = cosf(fTheta * 0.5f);
 		matRotX.m[1][2] = sinf(fTheta * 0.5f);
@@ -126,23 +144,23 @@ public:
 		// Draw Triangles
 		for (auto tri : meshCube.tris)
 		{
-			triangle triProjected, triTranslated, triRotatedZ, triRotatedZX;
-
-			// Rotate in Z-Axis
-			MultiplyMatrixVector(tri.p[0], triRotatedZ.p[0], matRotZ);
-			MultiplyMatrixVector(tri.p[1], triRotatedZ.p[1], matRotZ);
-			MultiplyMatrixVector(tri.p[2], triRotatedZ.p[2], matRotZ);
+			triangle triProjected, triTranslated, triRotated;
 
 			// Rotate in X-Axis
-			MultiplyMatrixVector(triRotatedZ.p[0], triRotatedZX.p[0], matRotX);
-			MultiplyMatrixVector(triRotatedZ.p[1], triRotatedZX.p[1], matRotX);
-			MultiplyMatrixVector(triRotatedZ.p[2], triRotatedZX.p[2], matRotX);
+			RotateMesh(tri, triRotated, matRotX);
+
+			/*// Rotate in Z-Axis
+			RotateMesh(tri, triRotated, matRotZ);*/
+
+			/*// Rotate in Z-Axis then X-Axis
+			RotateMesh(tri, triRotated, matRotZ);
+			RotateMesh(triRotated, triRotated, matRotX);*/
 
 			// Offset into the screen
-			triTranslated = triRotatedZX;
-			triTranslated.p[0].z = triRotatedZX.p[0].z + 3.0f;
-			triTranslated.p[1].z = triRotatedZX.p[1].z + 3.0f;
-			triTranslated.p[2].z = triRotatedZX.p[2].z + 3.0f;
+			triTranslated = triRotated;
+			triTranslated.p[0].z = triRotated.p[0].z + k;
+			triTranslated.p[1].z = triRotated.p[1].z + k;
+			triTranslated.p[2].z = triRotated.p[2].z + k;
 
 			// Project triangles from 3D --> 2D
 			MultiplyMatrixVector(triTranslated.p[0], triProjected.p[0], matProj);
