@@ -1,0 +1,8 @@
+﻿  3DEngine.cpp
+D:\Programmazione\3D_Engine\3DEngine\3DEngine\3DEngine.cpp(184,43): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+D:\Programmazione\3D_Engine\3DEngine\3DEngine\3DEngine.cpp(184,22): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+D:\Programmazione\3D_Engine\3DEngine\3DEngine\3DEngine.cpp(183,43): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+D:\Programmazione\3D_Engine\3DEngine\3DEngine\3DEngine.cpp(183,22): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+D:\Programmazione\3D_Engine\3DEngine\3DEngine\3DEngine.cpp(182,55): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+D:\Programmazione\3D_Engine\3DEngine\3DEngine\3DEngine.cpp(182,34): warning C4244: 'argomento': conversione da 'float' a 'int'. Possibile perdita di dati.
+  3DEngine.vcxproj -> D:\Programmazione\3D_Engine\3DEngine\Debug\3DEngine.exe
