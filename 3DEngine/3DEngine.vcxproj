@@ -117,11 +117,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile />
-      <AdditionalIncludeDirectories>E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Users\andre\Documents\GitHub\3D-Engine;E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\include;E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine;E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine;E:\Users\andre\Documents\GitHub\3D-Engine;E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\include;E:\Users\andre\Documents\GitHub\3D-Engine\3DEngine\header;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

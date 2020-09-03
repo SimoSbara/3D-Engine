@@ -1,4 +1,5 @@
 #include <olcConsoleGameEngine.h>
+#include <math.h>
 using namespace std;
 
 
@@ -33,12 +34,16 @@ public:
 
 private:
 	mesh meshCube;
+	mesh meshPyramid;
+
 	mat4x4 matProj;
+	float k = 3.0f;
 
 	float fTheta;
 
 	void MultiplyMatrixVector(vec3d& i, vec3d& o, mat4x4& m)
 	{
+		
 		o.x = i.x * m.m[0][0] + i.y * m.m[1][0] + i.z * m.m[2][0] + m.m[3][0];
 		o.y = i.x * m.m[0][1] + i.y * m.m[1][1] + i.z * m.m[2][1] + m.m[3][1];
 		o.z = i.x * m.m[0][2] + i.y * m.m[1][2] + i.z * m.m[2][2] + m.m[3][2];
@@ -81,6 +86,20 @@ public:
 
 		};
 
+		meshPyramid.tris = {
+			//BOTTOM
+			{ 0.0f, 0.0f, 0.0f,    0.5f, 0.0f, (float)sqrt(0.75),    1.0f, 0.0f, 0.0f },
+
+			//FACE1
+			{ 0.5f, 0.0f, (float)sqrt(0.75),    0.5f, (float)sqrt(2.25 / 4), (float)(sqrt(0.75) / 2),    0.0f, 0.0f, 0.0f },
+			
+			//FACE2
+			{ 0.0f, 0.0f, 0.0f,    0.5f, (float)sqrt(2.25/4), (float)(sqrt(0.75)/2),    1.0f, 0.0f, 0.0f },
+
+			//FACE3
+			{ 1.0f, 0.0f, 0.0f,    0.5f, (float)sqrt(2.25 / 4), (float)(sqrt(0.75) / 2),    0.5f, 0.0f, (float)sqrt(0.75) },
+		};
+
 		// Projection Matrix
 		float fNear = 0.1f;
 		float fFar = 1000.0f;
@@ -100,6 +119,7 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
+
 		// Clear Screen
 		Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, FG_BLACK);
 
@@ -124,6 +144,51 @@ public:
 		matRotX.m[3][3] = 1;
 
 		// Draw Triangles
+		for (auto tri : meshPyramid.tris)
+		{
+			triangle triProjected, triTranslated, triRotatedZ, triRotatedZX;
+
+			// Rotate in Z-Axis
+			MultiplyMatrixVector(tri.p[0], triRotatedZ.p[0], matRotZ);
+			MultiplyMatrixVector(tri.p[1], triRotatedZ.p[1], matRotZ);
+			MultiplyMatrixVector(tri.p[2], triRotatedZ.p[2], matRotZ);
+
+			// Rotate in X-Axis
+			MultiplyMatrixVector(triRotatedZ.p[0], triRotatedZX.p[0], matRotX);
+			MultiplyMatrixVector(triRotatedZ.p[1], triRotatedZX.p[1], matRotX);
+			MultiplyMatrixVector(triRotatedZ.p[2], triRotatedZX.p[2], matRotX);
+
+			// Offset into the screen
+			triTranslated = triRotatedZX;
+			triTranslated.p[0].z = triRotatedZX.p[0].z + 3.0f;
+			triTranslated.p[1].z = triRotatedZX.p[1].z + 3.0f;
+			triTranslated.p[2].z = triRotatedZX.p[2].z + 3.0f;
+			//k += 0.01f;
+
+			// Project triangles from 3D --> 2D
+			MultiplyMatrixVector(triTranslated.p[0], triProjected.p[0], matProj);
+			MultiplyMatrixVector(triTranslated.p[1], triProjected.p[1], matProj);
+			MultiplyMatrixVector(triTranslated.p[2], triProjected.p[2], matProj);
+
+			// Scale into view
+			triProjected.p[0].x += 1.0f; triProjected.p[0].y += 1.0f;
+			triProjected.p[1].x += 1.0f; triProjected.p[1].y += 1.0f;
+			triProjected.p[2].x += 1.0f; triProjected.p[2].y += 1.0f;
+			triProjected.p[0].x *= 0.5f * (float)ScreenWidth();
+			triProjected.p[0].y *= 0.5f * (float)ScreenHeight();
+			triProjected.p[1].x *= 0.5f * (float)ScreenWidth();
+			triProjected.p[1].y *= 0.5f * (float)ScreenHeight();
+			triProjected.p[2].x *= 0.5f * (float)ScreenWidth();
+			triProjected.p[2].y *= 0.5f * (float)ScreenHeight();
+
+			// Rasterize triangle
+			DrawTriangle(triProjected.p[0].x, triProjected.p[0].y,
+				triProjected.p[1].x, triProjected.p[1].y,
+				triProjected.p[2].x, triProjected.p[2].y,
+				PIXEL_SOLID, FG_WHITE);
+
+		}
+
 		for (auto tri : meshCube.tris)
 		{
 			triangle triProjected, triTranslated, triRotatedZ, triRotatedZX;
@@ -143,6 +208,7 @@ public:
 			triTranslated.p[0].z = triRotatedZX.p[0].z + 3.0f;
 			triTranslated.p[1].z = triRotatedZX.p[1].z + 3.0f;
 			triTranslated.p[2].z = triRotatedZX.p[2].z + 3.0f;
+			//k += 0.01f;
 
 			// Project triangles from 3D --> 2D
 			MultiplyMatrixVector(triTranslated.p[0], triProjected.p[0], matProj);
